@@ -657,6 +657,20 @@ namespace UnityEngine.Rendering.Universal
             return false;
         }
 
+        static bool CheckPostProcessForMotionVector(in CameraData cameraData) 
+        {
+            if (!cameraData.postProcessEnabled)
+                return false;
+            var stack = VolumeManager.instance.stack;
+
+            if (stack.GetComponent<TemporalAntialiasing>().IsActive())
+                return true;
+
+            return false;
+        }
+
+
+
         static void SetSupportedRenderingFeatures()
         {
 #if UNITY_EDITOR
