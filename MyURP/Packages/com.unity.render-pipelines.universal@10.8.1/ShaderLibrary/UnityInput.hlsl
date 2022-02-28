@@ -129,6 +129,15 @@ real4 unity_SHBr;
 real4 unity_SHBg;
 real4 unity_SHBb;
 real4 unity_SHC;
+
+// Velocity
+float4x4 unity_MatrixPreviousM;
+float4x4 unity_MatrixPreviousMI;
+//X : Use last frame positions (right now skinned meshes are the only objects that use this
+//Y : Force No Motion
+//Z : Z bias value
+//W : Camera only
+float4 unity_MotionVectorsParams;
 CBUFFER_END
 
 #if defined(USING_STEREO_MATRICES)
@@ -193,6 +202,9 @@ float4x4 unity_MatrixInvV;
 float4x4 unity_MatrixInvP;
 float4x4 unity_MatrixVP;
 float4x4 unity_MatrixInvVP;
+float4x4 unity_UnJitteredMatrixVP;
+float4x4 unity_PrevMatrixVP;
+float4 unity_JitterParams;
 float4 unity_StereoScaleOffset;
 int unity_StereoEyeIndex;
 #endif

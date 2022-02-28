@@ -98,8 +98,9 @@ namespace UnityEditor.Rendering.Universal
                 new GUIContent("None"),
                 new GUIContent("Fast Approximate Anti-aliasing (FXAA)"),
                 new GUIContent("Subpixel Morphological Anti-aliasing (SMAA)"),
+                new GUIContent("Temporal Anti-aliasing (TAA)"),
             };
-            public static int[] antialiasingValues = { 0, 1, 2};
+            public static int[] antialiasingValues = { 0, 1, 2, 3};
         }
 
         ReorderableList m_LayerList;

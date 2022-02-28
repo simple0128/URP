@@ -64,6 +64,12 @@ namespace UnityEngine.Rendering.Universal
 
             [Reload("Shaders/PostProcessing/FinalPost.shader")]
             public Shader finalPostPassPS;
+
+            [Reload("Shaders/PostProcessing/TemporalAntialiasing.shader")]
+            public Shader temporalAntialiasingPS;
+
+            [Reload("Shaders/PostProcessing/TemporalAntialiasing.compute")]
+            public ComputeShader temporalAntialiasingCS;
         }
 
         [Serializable, ReloadGroup]

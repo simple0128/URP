@@ -108,7 +108,9 @@ namespace UnityEngine.Rendering.Universal
             // for now using cmd.SetViewProjecionMatrices
             //SetViewAndProjectionMatrices(cmd, viewMatrix, cameraData.GetDeviceProjectionMatrix(), setInverseMatrices);
             cmd.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
-
+            var unJitteredProjectionMatrix = cameraData.GetUnJitteredProjectionMatrix();
+            cmd.SetGlobalMatrix(ShaderPropertyId.unJitteredViewAndProjectionMatrix, GL.GetGPUProjectionMatrix(unJitteredProjectionMatrix, true) * viewMatrix);
+            cmd.SetGlobalVector(ShaderPropertyId.jitterParams, cameraData.GetJitterParams());
             if (setInverseMatrices)
             {
                 Matrix4x4 gpuProjectionMatrix = cameraData.GetGPUProjectionMatrix();

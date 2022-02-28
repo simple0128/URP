@@ -48,11 +48,15 @@ namespace UnityEngine.Rendering.Universal
         // We might change this API soon.
         Matrix4x4 m_ViewMatrix;
         Matrix4x4 m_ProjectionMatrix;
+        Matrix4x4 m_UnJitteredProjectionMatrix;        
+        Vector4 m_JitterParams;
 
-        internal void SetViewAndProjectionMatrix(Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix)
+        internal void SetViewAndProjectionMatrix(Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix, Vector4 jitterParams, Matrix4x4 unJitteredProjectionMatrix)
         {
             m_ViewMatrix = viewMatrix;
             m_ProjectionMatrix = projectionMatrix;
+            m_JitterParams = jitterParams;
+            m_UnJitteredProjectionMatrix = unJitteredProjectionMatrix;
         }
 
         /// <summary>
@@ -90,7 +94,18 @@ namespace UnityEngine.Rendering.Universal
         /// <returns></returns>
         public Matrix4x4 GetGPUProjectionMatrix(int viewIndex = 0)
         {
-            return GL.GetGPUProjectionMatrix(GetProjectionMatrix(viewIndex), IsCameraProjectionMatrixFlipped());
+            //return GL.GetGPUProjectionMatrix(GetProjectionMatrix(viewIndex), IsCameraProjectionMatrixFlipped());
+            return GL.GetGPUProjectionMatrix(GetProjectionMatrix(viewIndex), true);
+        }
+        
+        public Vector4 GetJitterParams()
+        {
+            return m_JitterParams;
+        }
+
+        public Matrix4x4 GetUnJitteredProjectionMatrix()
+        {
+            return m_UnJitteredProjectionMatrix;
         }
 
         public Camera camera;
@@ -272,6 +287,9 @@ namespace UnityEngine.Rendering.Universal
         public static readonly int inverseViewMatrix = Shader.PropertyToID("unity_MatrixInvV");
         public static readonly int inverseProjectionMatrix = Shader.PropertyToID("unity_MatrixInvP");
         public static readonly int inverseViewAndProjectionMatrix = Shader.PropertyToID("unity_MatrixInvVP");
+        public static readonly int unJitteredViewAndProjectionMatrix = Shader.PropertyToID("unity_UnJitteredMatrixVP");
+        public static readonly int prevViewAndProjectionMatrix = Shader.PropertyToID("unity_PrevMatrixVP");
+        public static readonly int jitterParams = Shader.PropertyToID("unity_JitterParams");
 
         public static readonly int cameraProjectionMatrix = Shader.PropertyToID("unity_CameraProjection");
         public static readonly int inverseCameraProjectionMatrix = Shader.PropertyToID("unity_CameraInvProjection");
@@ -752,7 +770,7 @@ namespace UnityEngine.Rendering.Universal
         PaniniProjection,
         UberPostProcess,
         Bloom,
-
+        TAA,
         FinalBlit
     }
 }

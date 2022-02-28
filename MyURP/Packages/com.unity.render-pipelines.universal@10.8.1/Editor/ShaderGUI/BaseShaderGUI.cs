@@ -164,6 +164,7 @@ namespace UnityEditor
             FindProperties(properties); // MaterialProperties can be animated so we do not cache them but fetch them every event to ensure animated values are updated correctly
             materialEditor = materialEditorIn;
             Material material = materialEditor.target as Material;
+            material.SetShaderPassEnabled("MotionVectors", false);
 
             // Make sure that needed setup (ie keywords/renderqueue) are set up if we're switching some existing
             // material to a universal shader.

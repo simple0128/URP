@@ -646,6 +646,9 @@ namespace UnityEngine.Rendering.Universal
             if (cameraData.antialiasing == AntialiasingMode.SubpixelMorphologicalAntiAliasing)
                 return true;
 
+            if (cameraData.antialiasing == AntialiasingMode.TemporalAntialiasing)
+                return true;
+
             var stack = VolumeManager.instance.stack;
 
             if (stack.GetComponent<DepthOfField>().IsActive())
@@ -890,7 +893,15 @@ namespace UnityEngine.Rendering.Universal
                 projectionMatrix.m00 = newCotangent;
             }
 
-            cameraData.SetViewAndProjectionMatrix(camera.worldToCameraMatrix, projectionMatrix);
+            if (cameraData.postProcessEnabled && cameraData.antialiasing == AntialiasingMode.TemporalAntialiasing)
+            {
+                TemporalAntialiasingUtils.GetJitteredPerspectiveProjectionMatrix(cameraData.camera, out var jitter, out var jitteredMatrix);
+                cameraData.SetViewAndProjectionMatrix(camera.worldToCameraMatrix, jitteredMatrix, jitter, projectionMatrix);
+            }
+            else
+            {
+                cameraData.SetViewAndProjectionMatrix(camera.worldToCameraMatrix, projectionMatrix, Vector4.zero, projectionMatrix);
+            }
         }
 
         static void InitializeRenderingData(UniversalRenderPipelineAsset settings, ref CameraData cameraData, ref CullingResults cullResults,
